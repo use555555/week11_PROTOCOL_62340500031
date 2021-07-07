@@ -10,5 +10,5 @@ main.c:335:9:UARTReadChar	32	static
 main.c:350:6:UARTTxDumpBuffer	24	static
 main.c:376:6:UARTTxWrite	32	static
 main.c:401:6:DynamixelProtocal2	112	static
-main.c:644:16:update_crc	536	static
-main.c:696:6:Error_Handler	4	static,ignoring_inline_asm
+main.c:617:16:update_crc	536	static
+main.c:669:6:Error_Handler	4	static,ignoring_inline_asm
