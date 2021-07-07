@@ -72,8 +72,8 @@ uint16_t dataWritenow = 0;
 uint16_t startAddrnow = 0;
 uint16_t numberOfDataToReadnow = 0;
 uint16_t ParamNumnow = 0;
-uint8_t Param3now = 0;
-uint8_t Param2now = 0;
+//uint8_t Param3now = 0;
+//uint8_t Param2now = 0;
 
 typedef enum
 {
@@ -531,7 +531,7 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 
 			case 0x02://READ
 			{
-				uint16_t startAddr = ((parameter[1]& 0xFF) <<8)|(parameter[0]&0xFF);
+				uint16_t startAddr = (parameter[0]&0xFF)|(parameter[1]<<8 &0xFF);
 				startAddrnow = startAddr;
 				uint16_t numberOfDataToRead = (parameter[2]&0xFF)|(parameter[3]<<8 &0xFF);
 				numberOfDataToReadnow = numberOfDataToRead;
@@ -552,28 +552,21 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			case 0x03://WRITE
 			{
 				//LAB
-				uint16_t writeAddr = ((parameter[1]& 0xFF) <<8)|(parameter[0]&0xFF);
-				uint16_t dataWrite = ((parameter[2]& 0xFF) <<8)|(parameter[3]&0xFF);
-				writeAddrnow = writeAddr;
-				dataWritenow = dataWrite;
-				Param2now = parameter[2];
-				Param3now = parameter[3];
-				uint8_t temp[] = { 0xff, 0xff, 0xfd, 0x00, 0x00, 0x04, 0x00, 0x55, 0x00, 0x00, 0x00 };
-				if(writeAddr > 0xFE)
+				uint16_t writeAddrStart = ((parameter[1]& 0xFF) <<8)|(parameter[0]&0xFF);
+				uint8_t temp[] = {0xff, 0xff, 0xfd, 0x00, 0x00, 0x04, 0x00, 0x55, 0x00, 0x00, 0x00};
+				for (int i = 0; i < CollectedData - 2; ++i)
 				{
-					temp[8] = 0x04;
-				}
-				else if(ParamNum <= 3||ParamNum > 4)
-				{
-					temp[8] = 0x05;
-				}
-				else if(dataWrite > 0xFF)
-				{
-					temp[8] = 0x06;
-				}
-				else
-				{
-					Memory[writeAddr] = dataWrite;
+					writeAddrnow = writeAddrStart+i;
+					dataWritenow = parameter[2+i];
+					if(writeAddrStart+i > 0xFE)
+					{
+						temp[8] = 0x04;
+						i = CollectedData - 2;
+					}
+					else
+					{
+						Memory[writeAddrStart+i] = parameter[2+i];
+					}
 				}
 				temp[4] = MotorID;
 				uint16_t crc_calc = update_crc(0, temp, 9);
@@ -581,6 +574,40 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 				temp[10] = (crc_calc >> 8) & 0xFF;
 				UARTTxWrite(uart, temp, 11);
 				break;
+
+
+
+
+				//Another
+//				uint16_t writeAddr = ((parameter[1]& 0xFF) <<8)|(parameter[0]&0xFF);
+//				uint16_t dataWrite = ((parameter[2]& 0xFF) <<8)|(parameter[3]&0xFF);
+//				writeAddrnow = writeAddr;
+//				dataWritenow = dataWrite;
+//				Param2now = parameter[2];
+//				Param3now = parameter[3];
+//				uint8_t temp[] = { 0xff, 0xff, 0xfd, 0x00, 0x00, 0x04, 0x00, 0x55, 0x00, 0x00, 0x00 };
+//				if(writeAddr > 0xFE)
+//				{
+//					temp[8] = 0x04;
+//				}
+//				else if(ParamNum <= 3||ParamNum > 4)
+//				{
+//					temp[8] = 0x05;
+//				}
+//				else if(dataWrite > 0xFF)
+//				{
+//					temp[8] = 0x06;
+//				}
+//				else
+//				{
+//					Memory[writeAddr] = dataWrite;
+//				}
+//				temp[4] = MotorID;
+//				uint16_t crc_calc = update_crc(0, temp, 9);
+//				temp[9] = crc_calc & 0xff;
+//				temp[10] = (crc_calc >> 8) & 0xFF;
+//				UARTTxWrite(uart, temp, 11);
+//				break;
 
 
 			}
