@@ -555,15 +555,11 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 				//LAB
 <<<<<<< HEAD
 				uint16_t writeAddr = ((parameter[1]& 0xFF) <<8)|(parameter[0]&0xFF);
-<<<<<<< HEAD
 				uint16_t dataWrite = ((parameter[3]& 0xFF) <<8)|(parameter[2]&0xFF);
 =======
 				uint16_t writeAddr = (parameter[0]&0xFF)|(parameter[1]<<8 &0xFF);
 				uint8_t dataWrite = (parameter[2]&0xFF);
 >>>>>>> parent of 879a57c (Finalize in new project)
-=======
-				uint16_t dataWrite = ((parameter[2]& 0xFF) <<8)|(parameter[3]&0xFF);
->>>>>>> parent of 4410085 (Fix)
 				writeAddrnow = writeAddr;
 				dataWritenow = dataWrite;
 				uint8_t temp[] = { 0xff, 0xff, 0xfd, 0x00, 0x00, 0x04, 0x00, 0x55, 0x00, 0x00, 0x00 };

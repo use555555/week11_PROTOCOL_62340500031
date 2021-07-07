@@ -1780,13 +1780,13 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
  8000dc4:	4313      	orrs	r3, r2
  8000dc6:	b21b      	sxth	r3, r3
  8000dc8:	f8a7 3062 	strh.w	r3, [r7, #98]	; 0x62
-				uint16_t dataWrite = ((parameter[2]& 0xFF) <<8)|(parameter[3]&0xFF);
+				uint16_t dataWrite = ((parameter[3]& 0xFF) <<8)|(parameter[2]&0xFF);
  8000dcc:	4b4f      	ldr	r3, [pc, #316]	; (8000f0c <DynamixelProtocal2+0x558>)
- 8000dce:	789b      	ldrb	r3, [r3, #2]
+ 8000dce:	78db      	ldrb	r3, [r3, #3]
  8000dd0:	021b      	lsls	r3, r3, #8
  8000dd2:	b21a      	sxth	r2, r3
  8000dd4:	4b4d      	ldr	r3, [pc, #308]	; (8000f0c <DynamixelProtocal2+0x558>)
- 8000dd6:	78db      	ldrb	r3, [r3, #3]
+ 8000dd6:	789b      	ldrb	r3, [r3, #2]
  8000dd8:	b21b      	sxth	r3, r3
  8000dda:	4313      	orrs	r3, r2
  8000ddc:	b21b      	sxth	r3, r3
